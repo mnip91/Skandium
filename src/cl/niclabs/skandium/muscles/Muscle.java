@@ -17,6 +17,8 @@
  */
 package cl.niclabs.skandium.muscles;
 
+import java.io.Serializable;
+
 /**
  * A <code>Muscle</code> is a unit of execution provided by programmers.
  * 
@@ -25,6 +27,6 @@ package cl.niclabs.skandium.muscles;
  * @param <P> The input type of the muscle.
  * @param <R> The result type of the muscle.
  */
-public abstract interface Muscle<P,R>{
+public abstract interface Muscle<P,R> extends Serializable {
 
 }

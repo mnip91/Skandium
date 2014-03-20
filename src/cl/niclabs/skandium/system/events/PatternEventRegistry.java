@@ -17,6 +17,7 @@
  */
 package cl.niclabs.skandium.system.events;
 
+import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.concurrent.PriorityBlockingQueue;
 
@@ -28,7 +29,9 @@ import cl.niclabs.skandium.events.Where;
  * This class is used by each pattern(Skeleton) class in order to register and remove event
  * listeners
  */
-public class PatternEventRegistry {
+public class PatternEventRegistry implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	private Hashtable<Integer,PriorityBlockingQueue<SkandiumEventListener>> listeners;
 	private boolean hasListeners;
 

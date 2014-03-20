@@ -17,6 +17,7 @@
  */
 package cl.niclabs.skandium.instructions;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Stack;
 
@@ -31,7 +32,7 @@ import cl.niclabs.skandium.skeletons.Skeleton;
  * 
  * @author mleyton
  */
-public interface Instruction {
+public interface Instruction extends Serializable {
 
 	/**
 	 * The entry point to execute an instruction. This method is implemented by each instruction and executes

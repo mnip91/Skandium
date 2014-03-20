@@ -53,7 +53,8 @@ public class Task implements Runnable, Comparable<Task>{
 	TaskExecutor executor;			//The executor service used for computation.
 
 	boolean canceled;				//True if this task was canceled, false otherwise.
-	
+	boolean notified;				//True if this task notified (gcm extension)
+
 	/**
 	 * Constructs a root task, with its default priority.
 	 * 
@@ -141,7 +142,7 @@ public class Task implements Runnable, Comparable<Task>{
 	/**
 	 * @return true if this <code>Task</code> is root, false otherwise.
 	 */
-	boolean isRoot(){
+	public boolean isRoot(){
 		return (parent == null);
 	}
 	
@@ -151,7 +152,7 @@ public class Task implements Runnable, Comparable<Task>{
 	 * 
 	 * @return true if this <code>Task</code> is finished, false otherwise.
 	 */
-	boolean isFinished(){
+	public boolean isFinished(){
 		
 		return stack.empty() && childrenAreFinished();
 	}
@@ -175,7 +176,7 @@ public class Task implements Runnable, Comparable<Task>{
 	 * This method is used to update this <code>Task</code>'s parameter data.
 	 * @param P The new data which will overwrite the previous value held in this <code>Task</code>.
 	 */
-	void setP(Object P) {
+	public void setP(Object P) {
 		this.P = P;		
 	}
 
@@ -183,7 +184,7 @@ public class Task implements Runnable, Comparable<Task>{
 	 * This method is used to update this <code>Task</code>'s parameter data.
 	 * @param P The new data which will overwrite the previous value held in this <code>Task</code>.
 	 */
-	Object getP() {
+	public Object getP() {
 		return P;
 	}
 	
@@ -232,7 +233,7 @@ public class Task implements Runnable, Comparable<Task>{
 	 * Get the current computation stack for this <code>Task</code> 
 	 * @return
 	 */
-	Stack<Instruction> getStack() {
+	public Stack<Instruction> getStack() {
 		return this.stack;
 	}
 
@@ -282,7 +283,7 @@ public class Task implements Runnable, Comparable<Task>{
 	 * If the <code>Task</code> is root, then the future is updated with the result.
 	 */
 	@SuppressWarnings("unchecked")
-	protected <P> void notifyParent() {
+	public <P> void notifyParent() {
 
 		if(this.isRoot()){
 			updateFutureWithResult();
@@ -355,5 +356,13 @@ public class Task implements Runnable, Comparable<Task>{
 	boolean isCancelled(){
 		
 		return this.canceled;
+	}
+
+	public boolean isNotified() {
+		return notified;
+	}
+	
+	public void setAsNotified() {
+		notified = true;
 	}
 }

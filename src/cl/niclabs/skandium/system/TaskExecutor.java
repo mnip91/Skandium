@@ -39,7 +39,10 @@ public class TaskExecutor extends ThreadPoolExecutor {
 		super(maxThreads, maxThreads, 10, TimeUnit.MILLISECONDS, new PriorityBlockingQueue<Runnable>());
 	}
 
-
+	public TaskExecutor(int maxThreads, PriorityBlockingQueue<Runnable> workQueue) {
+		super(maxThreads, maxThreads, 10, TimeUnit.MILLISECONDS, workQueue);
+	}
+	
 	/** {@inheritDoc}
 	 */
 	@Override

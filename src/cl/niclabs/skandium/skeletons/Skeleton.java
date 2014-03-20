@@ -17,6 +17,7 @@
  */
 package cl.niclabs.skandium.skeletons;
 
+import java.io.Serializable;
 import java.util.concurrent.Future;
 
 /**
@@ -27,7 +28,7 @@ import java.util.concurrent.Future;
  * @param <P> The input type of the parameter.
  * @param <R> The output type of the parameter.
  */
-public interface Skeleton<P,R> {
+public interface Skeleton<P,R> extends Serializable {
 	
 	/**
 	 * Used to navigate the a <code>Skeleton</code> structure with the visitor design pattern.
