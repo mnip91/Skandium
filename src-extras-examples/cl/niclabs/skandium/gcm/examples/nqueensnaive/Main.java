@@ -31,7 +31,7 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 import cl.niclabs.skandium.gcm.DelegationCondition;
 import cl.niclabs.skandium.gcm.GCMSConstants;
 import cl.niclabs.skandium.gcm.Worker;
-import cl.niclabs.skandium.gcm.GCMSResultReceiver;
+import cl.niclabs.skandium.gcm.ResultReceiver;
 import cl.niclabs.skandium.gcm.Master;
 import cl.niclabs.skandium.gcm.GCMSkandium;
 import cl.niclabs.skandium.gcm.SkandiumComponentController;
@@ -96,7 +96,7 @@ public class Main {
 					    GCMTypeFactory.SINGLETON_CARDINALITY),
 				tf.createGCMItfType(
 					    "scrr",
-					    GCMSResultReceiver.class.getName(),
+					    ResultReceiver.class.getName(),
 					    GCMTypeFactory.SERVER,
 						GCMTypeFactory.MANDATORY,
 						GCMTypeFactory.SINGLETON_CARDINALITY)
@@ -123,11 +123,13 @@ public class Main {
 	    
 	    Component SC1 = GCMSkandiumBuilder.build("SC1");
 	    Component SC2 = GCMSkandiumBuilder.build("SC2");
+	    Component SC3 = GCMSkandiumBuilder.build("SC3");
 	    
 	    PAContentController cc = Utils.getPAContentController(compositeComp);
 	    cc.addFcSubComponent(exampleComp);
 	    cc.addFcSubComponent(SC1);
 	    cc.addFcSubComponent(SC2);
+	    cc.addFcSubComponent(SC3);
 	    
 	    PABindingController bcTest = Utils.getPABindingController(compositeComp);
         bcTest.bindFc("runnable", exampleComp.getFcInterface("runnable"));
@@ -138,30 +140,35 @@ public class Main {
         
         PABindingController bcSC1 = Utils.getPABindingController(SC1);
         bcSC1.bindFc(GCMSConstants.WORKER_CLIENT_ITF, SC2.getFcInterface(GCMSConstants.WORKER_SERVER_ITF));
+        bcSC1.bindFc(GCMSConstants.WORKER_CLIENT_ITF, SC3.getFcInterface(GCMSConstants.WORKER_SERVER_ITF));
         bcSC1.bindFc("scrr", exampleComp.getFcInterface("scrr"));
 
         
         PABindingController bcSC2 = Utils.getPABindingController(SC2);
         bcSC2.bindFc(GCMSConstants.MASTER_CLIENT_ITF, SC1.getFcInterface(GCMSConstants.MASTER_SERVER_ITF));
         
+        PABindingController bcSC3 = Utils.getPABindingController(SC3);
+        bcSC3.bindFc(GCMSConstants.MASTER_CLIENT_ITF, SC1.getFcInterface(GCMSConstants.MASTER_SERVER_ITF));
+        
         Utils.getPAGCMLifeCycleController(compositeComp).startFc();
 
         SkandiumComponentController scc = (SkandiumComponentController) SC1.getFcInterface("scc");
         SkandiumComponentController scc2 = (SkandiumComponentController) SC2.getFcInterface("scc");
-      
+        SkandiumComponentController scc3 = (SkandiumComponentController) SC2.getFcInterface("scc");
+        
         DelegationCondition cond = new DelegationCondition() {
 
       
 			private static final long serialVersionUID = 2L;
 
         	public boolean condition(int stackSize, int maxThreads) {
-        		return stackSize > 8;
+        		return stackSize > 4;
         	}
         };
 		
         scc.setDelegationCondition(cond);
         scc2.setDelegationCondition(cond);
-        
+        scc3.setDelegationCondition(cond);
       
 		
         Runnable example = (Runnable) compositeComp.getFcInterface("runnable");

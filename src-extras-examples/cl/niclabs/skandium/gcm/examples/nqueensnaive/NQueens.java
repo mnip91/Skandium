@@ -24,7 +24,7 @@ import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.proactive.core.component.control.PABindingController;
 
 import cl.niclabs.skandium.gcm.GCMSConstants;
-import cl.niclabs.skandium.gcm.GCMSResultReceiver;
+import cl.niclabs.skandium.gcm.ResultReceiver;
 import cl.niclabs.skandium.gcm.GCMSkandium;
 import cl.niclabs.skandium.skeletons.Map;
 import cl.niclabs.skandium.skeletons.DaC;
@@ -35,7 +35,7 @@ import cl.niclabs.skandium.skeletons.Skeleton;
  * 
  * @author mleyton
  */
-public class NQueens implements Runnable, GCMSResultReceiver, PABindingController {
+public class NQueens implements Runnable, ResultReceiver, PABindingController {
 
 	static Random random = new Random();
 	GCMSkandium gcmskandium;
@@ -45,7 +45,7 @@ public class NQueens implements Runnable, GCMSResultReceiver, PABindingControlle
        
     	int THREADS = Runtime.getRuntime().availableProcessors();
     	int BOARD = 17;  //Size board of the board
-    	int DEPTH = 3;
+    	int DEPTH = 5;
     	
     	System.out.println("Computing NQueens threads="+THREADS+" board="+ BOARD+" depth="+DEPTH+ ".");
     	

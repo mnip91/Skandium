@@ -1,8 +1,8 @@
 package cl.niclabs.skandium.gcm;
 
 import java.io.Serializable;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 
 import org.objectweb.fractal.api.NoSuchInterfaceException;
@@ -12,6 +12,7 @@ import org.objectweb.fractal.api.control.LifeCycleController;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.component.body.ComponentInitActive;
 import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
+import org.objectweb.proactive.extensions.dataspaces.Utils;
 
 import cl.niclabs.skandium.skeletons.Skeleton;
 import cl.niclabs.skandium.system.StackBuilder;
@@ -24,9 +25,8 @@ public class GCMSkandiumImpl implements GCMSkandium,
 
 	// Client Interfaces
 	private Master master;
-	private Worker worker;
-	private GCMSResultReceiver scrr;
-	private String hostname;
+	private WorkerMulticast worker;
+	private ResultReceiver scrr;
 	
 	// Internal Resources
 	private GCMSTaskExecutor executor;
@@ -41,8 +41,9 @@ public class GCMSkandiumImpl implements GCMSkandium,
 		skeleton.accept(builder);
 		
 		Task task = new Task(param, builder.stack, executor);
-		if(VERBOSE) 
-			System.out.println("Task from user accepted on host " + hostname);
+		if(VERBOSE) {
+			System.out.println("Task from user accepted on " + Utils.getHostname());
+		}
 
 		executor.execute(task);
 	}
@@ -54,17 +55,14 @@ public class GCMSkandiumImpl implements GCMSkandium,
 		
 		try {
 			Task task = registry.registerReceivedTask(head, executor);
-			if(VERBOSE) System.out.println("Task received on host " + hostname);
+			if(VERBOSE) {
+				System.out.println("Task received on " + Utils.getHostname());
+			}
 			executor.execute(task);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	public BooleanWrapper isAvailable() {
-		//TODO
-		return new BooleanWrapper(true);
 	}
 
 	// As Master
@@ -81,7 +79,7 @@ public class GCMSkandiumImpl implements GCMSkandium,
 			return;
 		}
 		
-		if(VERBOSE) System.out.println("Result received on host " + hostname);
+		if(VERBOSE) System.out.println("Result received on host " + Utils.getHostname());
 		
 		if( !task.isRoot() ) {
 			task.notifyParent();
@@ -113,8 +111,10 @@ public class GCMSkandiumImpl implements GCMSkandium,
 	public void sendTask(Task task) {
 
 		TaskHead head = registry.registerTransmittedTask(task);
+		List<TaskHead> list = new ArrayList<TaskHead>();
+		list.add(head);
 		try {
-			worker.doTask(head);
+			worker.doTask(list);
 			task.getStack().clear();
 		}
 		catch(Exception e){
@@ -166,9 +166,9 @@ public class GCMSkandiumImpl implements GCMSkandium,
 		if(name.compareTo(GCMSConstants.MASTER_CLIENT_ITF) == 0) {
 			master = (Master) itf;
 		} else if(name.compareTo(GCMSConstants.WORKER_CLIENT_ITF) == 0) {
-			worker = (Worker) itf;
+			worker = (WorkerMulticast) itf;
 		} else if(name.compareTo("scrr") == 0) {
-			scrr = (GCMSResultReceiver) itf;
+			scrr = (ResultReceiver) itf;
 		} else {
 			throw new NoSuchInterfaceException(name);
 		}
@@ -210,13 +210,7 @@ public class GCMSkandiumImpl implements GCMSkandium,
 
 	@Override
 	public void initComponentActivity(Body arg0) {
-		try {
-			hostname = InetAddress.getLocalHost().getHostName();
-			System.out.println("InetAddress.getLocalHost().getHostName(); ==> " + hostname);
-		} catch (UnknownHostException e) {
-			hostname = "unknown";
-			e.printStackTrace();
-		}
+		System.out.println("GCMSkandium initiated on " + Utils.getHostname());
 	}
 
 }

@@ -1,6 +1,6 @@
 package cl.niclabs.skandium.gcm;
 
-public interface GCMSResultReceiver {
+public interface ResultReceiver {
 
 	public void receive(Object result);
 }
