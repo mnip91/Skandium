@@ -11,9 +11,10 @@ import org.objectweb.fractal.api.control.IllegalLifeCycleException;
 import org.objectweb.fractal.api.control.LifeCycleController;
 import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.component.body.ComponentInitActive;
-import org.objectweb.proactive.core.util.wrapper.BooleanWrapper;
 import org.objectweb.proactive.extensions.dataspaces.Utils;
 
+import cl.niclabs.skandium.gcm.taskheader.NullTaskHeader;
+import cl.niclabs.skandium.gcm.taskheader.TaskHeader;
 import cl.niclabs.skandium.skeletons.Skeleton;
 import cl.niclabs.skandium.system.StackBuilder;
 import cl.niclabs.skandium.system.Task;
@@ -22,6 +23,8 @@ import cl.niclabs.skandium.system.Task;
 public class GCMSkandiumImpl implements GCMSkandium, 
 		SkandiumComponentController, Worker, Master,
 		LifeCycleController, BindingController, ComponentInitActive {
+
+	private static final long serialVersionUID = 1L;
 
 	// Client Interfaces
 	private Master master;
@@ -51,8 +54,15 @@ public class GCMSkandiumImpl implements GCMSkandium,
 	// As Worker
 
 	@Override
-	public void doTask(TaskHead head) {
+	public void doTask(TaskHeader head) {
 		
+		if(head instanceof NullTaskHeader) {
+			//if(VERBOSE) {
+			//	System.out.println("NullTask received on " + Utils.getHostname());
+			//}
+			return;
+		}
+	
 		try {
 			Task task = registry.registerReceivedTask(head, executor);
 			if(VERBOSE) {
@@ -68,8 +78,12 @@ public class GCMSkandiumImpl implements GCMSkandium,
 	// As Master
 
 	@Override
-	public void receiveResult(TaskHead head) {
+	public void receiveResult(TaskHeader head) {
 		
+		if(head instanceof NullTaskHeader) {
+			return;
+		}
+
 		Task task = registry.eraseTransmittedTask(head);
 		
 		if(task == null) {
@@ -79,7 +93,7 @@ public class GCMSkandiumImpl implements GCMSkandium,
 			return;
 		}
 		
-		if(VERBOSE) System.out.println("Result received on host " + Utils.getHostname());
+		if(VERBOSE) System.out.println("Result received on " + Utils.getHostname());
 		
 		if( !task.isRoot() ) {
 			task.notifyParent();
@@ -91,7 +105,7 @@ public class GCMSkandiumImpl implements GCMSkandium,
 
 	protected void returnFinishedTaskResult(Task task) {
 		
-		TaskHead originalHead = registry.eraseReceivedTask(task);
+		TaskHeader originalHead = registry.eraseReceivedTask(task);
 		try {
 			if(originalHead == null) {
 	
@@ -110,11 +124,9 @@ public class GCMSkandiumImpl implements GCMSkandium,
 	
 	public void sendTask(Task task) {
 
-		TaskHead head = registry.registerTransmittedTask(task);
-		List<TaskHead> list = new ArrayList<TaskHead>();
-		list.add(head);
+		TaskHeader head = registry.registerTransmittedTask(task);
 		try {
-			worker.doTask(list);
+			worker.doTask(head);
 			task.getStack().clear();
 		}
 		catch(Exception e){

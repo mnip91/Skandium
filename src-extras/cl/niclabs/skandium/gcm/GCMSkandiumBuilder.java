@@ -14,10 +14,11 @@ import org.objectweb.proactive.core.component.ControllerDescription;
 import org.objectweb.proactive.core.component.Utils;
 import org.objectweb.proactive.core.component.factory.PAGenericFactory;
 import org.objectweb.proactive.core.component.type.PAGCMTypeFactory;
+import org.objectweb.proactive.core.node.Node;
 
 public class GCMSkandiumBuilder {
 
-	public static Component build(String name) throws InstantiationException, NoSuchInterfaceException {
+	public static Component build(String name, Node node) throws InstantiationException, NoSuchInterfaceException {
 		
 		Component boot = Utils.getBootstrapComponent();
 	    PAGCMTypeFactory tf = Utils.getPAGCMTypeFactory(boot);
@@ -31,6 +32,6 @@ public class GCMSkandiumBuilder {
 	    ital.add(tf.createGCMItfType(GCMSConstants.WORKER_CLIENT_ITF, WorkerMulticast.class.getName(), GCMTypeFactory.CLIENT, GCMTypeFactory.OPTIONAL, GCMTypeFactory.MULTICAST_CARDINALITY));
 	    ital.add(tf.createGCMItfType("scc", SkandiumComponentController.class.getName(), GCMTypeFactory.SERVER, GCMTypeFactory.OPTIONAL, GCMTypeFactory.SINGLETON_CARDINALITY));
 	    ComponentType tGCMSkandium = tf.createFcType(ital.toArray(new InterfaceType[ital.size()]));
-	    return gf.newFcInstance(tGCMSkandium, new ControllerDescription(name, Constants.PRIMITIVE), new ContentDescription(GCMSkandiumImpl.class.getName()), null);
+	    return gf.newFcInstance(tGCMSkandium, new ControllerDescription(name, Constants.PRIMITIVE), new ContentDescription(GCMSkandiumImpl.class.getName()), node);
 	}
 }

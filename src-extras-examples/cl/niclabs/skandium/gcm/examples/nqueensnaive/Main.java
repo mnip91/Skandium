@@ -43,10 +43,20 @@ public class Main {
 	public static void main(String[] args) throws InstantiationException,
 			NoSuchInterfaceException, IllegalContentException,
 			IllegalLifeCycleException, IllegalBindingException,
-			ProActiveException, MalformedURLException, URISyntaxException {
+			ProActiveException, MalformedURLException, URISyntaxException, InterruptedException {
 		
-		/*String descriptorPath = "file:///user/mibanez/home/Workspace/" + 
-			"skandium/src-extras/cl/niclabs/skandium/gcm/examples/GCMApp.xml";
+		int SIZE = 17;
+		int DEPTH = 3;
+		try {
+			SIZE = Integer.parseInt(args[0]);
+			DEPTH = Integer.parseInt(args[1]);
+		} catch (Exception e) {
+			System.out.println("ERROR: size and depth must be specified." +
+					"\n Using the default configuration (17,3)");
+		}
+		
+		String descriptorPath = "file:///run/netsop/u/sop-nas2a/vol/home_oasis/mibanez/"
+				+ "Workspace/Skandium/src-extras-examples/cl/niclabs/skandium/gcm/examples/GCMApp.xml";
 		
 		descriptorPath = (new URL(descriptorPath)).toURI().getPath();
 		File appDescriptor = new File(descriptorPath);
@@ -58,9 +68,10 @@ public class Main {
 		
 		GCMVirtualNode VN1 = gcmad.getVirtualNode("VN1");
 		GCMVirtualNode VN2 = gcmad.getVirtualNode("VN2");
+		GCMVirtualNode VN3 = gcmad.getVirtualNode("VN3");
 		VN1.waitReady();
 		VN2.waitReady();
-		*/
+		VN3.waitReady();
 
 		Component boot = Utils.getBootstrapComponent();
 	    PAGCMTypeFactory tf = Utils.getPAGCMTypeFactory(boot);
@@ -68,8 +79,8 @@ public class Main {
 	    
 	    ComponentType tComposite = tf.createFcType(new InterfaceType[] {
 	    		tf.createGCMItfType(
-	    				"runnable",
-	    				Runnable.class.getName(),
+	    				"nqueens",
+	    				NQueens.class.getName(),
 	    				GCMTypeFactory.SERVER,
 	    				GCMTypeFactory.MANDATORY,
 	    				GCMTypeFactory.SINGLETON_CARDINALITY),
@@ -83,8 +94,8 @@ public class Main {
 	    
 	    ComponentType tExample = tf.createFcType(new InterfaceType[] {
 	    		tf.createGCMItfType(
-			    		"runnable",
-			    		Runnable.class.getName(),
+			    		"nqueens",
+			    		NQueens.class.getName(),
 			    		GCMTypeFactory.SERVER,
 			    		GCMTypeFactory.MANDATORY,
 			    		GCMTypeFactory.SINGLETON_CARDINALITY),
@@ -102,28 +113,28 @@ public class Main {
 						GCMTypeFactory.SINGLETON_CARDINALITY)
 	    });
 	    
-	    /*
+	    
 	    Node N1composite = VN1.getANode();
 	    Node N1example = VN1.getANode();
-	    Node N1sc1 = VN1.getANode();
-	    Node N2sc2 = VN2.getANode();
-	    */
+	    Node N1sc = VN1.getANode();
+	    Node N2sc = VN2.getANode();
+	    Node N3sc = VN3.getANode();
 
 	    Component compositeComp = gf.newFcInstance(
 		    	tComposite,
 		    	new ControllerDescription("compositeComp", Constants.COMPOSITE),
 		    	null,
-		    	null);
+		    	N1composite);
 	    
 	    Component exampleComp = gf.newFcInstance(
 		    	tExample,
 		    	new ControllerDescription("exampleComp", Constants.PRIMITIVE),
-		    	new ContentDescription(NQueens.class.getName()),
-		    	null);
+		    	new ContentDescription(NQueensImpl.class.getName()),
+		    	N1example);
 	    
-	    Component SC1 = GCMSkandiumBuilder.build("SC1");
-	    Component SC2 = GCMSkandiumBuilder.build("SC2");
-	    Component SC3 = GCMSkandiumBuilder.build("SC3");
+	    Component SC1 = GCMSkandiumBuilder.build("SC1", N1sc);
+	    Component SC2 = GCMSkandiumBuilder.build("SC2", N2sc);
+	    Component SC3 = GCMSkandiumBuilder.build("SC3", N3sc);
 	    
 	    PAContentController cc = Utils.getPAContentController(compositeComp);
 	    cc.addFcSubComponent(exampleComp);
@@ -132,7 +143,7 @@ public class Main {
 	    cc.addFcSubComponent(SC3);
 	    
 	    PABindingController bcTest = Utils.getPABindingController(compositeComp);
-        bcTest.bindFc("runnable", exampleComp.getFcInterface("runnable"));
+        bcTest.bindFc("nqueens", exampleComp.getFcInterface("nqueens"));
         bcTest.bindFc("scc", SC1.getFcInterface("scc"));
         
         PABindingController bcMergeSort = Utils.getPABindingController(exampleComp);
@@ -169,10 +180,9 @@ public class Main {
         scc.setDelegationCondition(cond);
         scc2.setDelegationCondition(cond);
         scc3.setDelegationCondition(cond);
-      
-		
-        Runnable example = (Runnable) compositeComp.getFcInterface("runnable");
-		
+
+        NQueens example = (NQueens) compositeComp.getFcInterface("nqueens");
+		example.setParameters(SIZE, DEPTH);
 		example.run();
 	}
 }

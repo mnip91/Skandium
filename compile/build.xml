@@ -4,17 +4,25 @@
 	<property name="src.skandium.dir"       value="${base.dir}/src" />
 	<property name="src.examples.dir"       value="${base.dir}/src-examples" />
 	<property name="src.extras.dir"       value="${base.dir}/src-extras" />
+	<property name="src.extras.examples.dir"       value="${base.dir}/src-extras-examples" />
 	<property name="javadoc.copyright"      value="Copyright 2009, NIC Labs, Universidad de Chile"/>
 	<property name="build.dir"              value="${base.dir}/build" />
 	<property name="compile.skandium.dir"   value="${build.dir}/skandium-classes" />
 	<property name="compile.examples.dir"   value="${build.dir}/examples-classes" />
 	<property name="compile.extras.dir"   value="${build.dir}/extras-classes" />
+	<property name="compile.extras.examples.dir"   value="${build.dir}/extras-examples-classes" />
 	<property name="skandium.version"       value="1.0b2" />
 	<property name="license.file"           value="${base.dir}/LICENSE" />
 	<property name="doc.dir"                value="${build.dir}/skandium-${skandium.version}-javadoc" />
 	<property name="source.level"		    value="1.6"/>
 	
-	<target name="all"  depends="clean, skandium.jar,skandium-src.jar, skandium-examples.jar, skandium-extras.jar, tar.development, tar.javadoc" description="Compile Everything"/>
+	<path id="lib.path">		
+		<fileset dir="${build.dir}" includes="**/*.jar"/>
+		<fileset dir="${base.dir}/external-lib" includes="**/*.jar"/>
+		<fileset dir="${base.dir}/external-lib/gcm" includes="**/*.jar"/>
+	</path>
+
+	<target name="all"  depends="clean, skandium.jar,skandium-src.jar, skandium-examples.jar, skandium-extras.jar, skandium-extras-examples.jar, tar.development, tar.javadoc" description="Compile Everything"/>
 	
 	<target name="javadoc.skandium" description="Generate the Skandium source javadoc ">
       <mkdir  dir="${doc.dir}"/>
@@ -63,7 +71,17 @@
 		<copy   todir="${compile.extras.dir}" >
 			<fileset file="${license.file}"/>
 		</copy>
-		<javac  srcdir="${src.extras.dir}" destdir="${compile.extras.dir}" classpath="${build.dir}/skandium-${skandium.version}.jar;${base.dir}/external-lib/jgraphx.jar"  source="${source.level}"/>
+		<javac  srcdir="${src.extras.dir}" destdir="${compile.extras.dir}" classpathref="lib.path" source="${source.level}"/>
+	</target>
+
+	<target name="compile.extras.examples" depends="skandium-extras.jar" description="Compile Skandium Extras Examples">
+		<mkdir  dir="${build.dir}"/>
+		<delete dir="${compile.extras.examples.dir}"/>
+		<mkdir  dir="${compile.extras.examples.dir}"/>
+		<copy   todir="${compile.extras.examples.dir}" >
+			<fileset file="${license.file}"/>
+		</copy>
+		<javac  srcdir="${src.extras.examples.dir}" destdir="${compile.extras.examples.dir}" classpathref="lib.path" source="${source.level}"/>
 	</target>
 
 	<target name="skandium.jar" depends="compile.skandium" description="Creates the Skandium Library JAR">
@@ -113,14 +131,31 @@
 			<fileset dir="${compile.extras.dir}"/>
 			<zipfileset src="${base.dir}/external-lib/jgraphx.jar" excludes="META-INF/*" />
 			<fileset file="${base.dir}/external-lib/jgraphx-license.txt"/>
-	    	<manifest>
-	    		<attribute name="Built-By" value="${user.name}"/>
-	    		<attribute name="Implementation-Vendor"  value="NIC Labs, University of Chile"/>
-	    		<attribute name="Implementation-Title"   value="Skandium Library Examples"/>
-	    		<attribute name="Implementation-Version" value="${skandium.version}"/>
-	    	</manifest>
-        </jar>
-		
+		    	<manifest>
+		    		<attribute name="Built-By" value="${user.name}"/>
+		    		<attribute name="Implementation-Vendor"  value="NIC Labs, University of Chile"/>
+		    		<attribute name="Implementation-Title"   value="Skandium Library Examples"/>
+		    		<attribute name="Implementation-Version" value="${skandium.version}"/>
+		    	</manifest>
+	        </jar>
+	</target>
+
+	<target name="skandium-extras-examples.jar" depends="compile.extras.examples" description="Creats the Skandium Extras Examples JAR">
+		<delete dir="${build.dir}/skandium-${skandium.version}-extras-examples.jar"/>
+		<jar destfile="${build.dir}/skandium-${skandium.version}-extras-examples.jar">
+			<fileset dir="${compile.extras.examples.dir}"/>
+			<fileset dir="${src.extras.examples.dir}"/>
+			<fileset dir="${compile.skandium.dir}"/>
+			<fileset dir="${compile.extras.dir}"/>
+		    	<manifest>
+		    		<attribute name="Class-Path" value="skandium-${skandium.version}.jar"/>
+		    		<attribute name="Main-Class" value="cl.niclabs.skandium.gcm.examples.nqueensnaive.Main"/>
+		    		<attribute name="Built-By" value="${user.name}"/>
+		    		<attribute name="Implementation-Vendor"  value="NIC Labs, University of Chile"/>
+		    		<attribute name="Implementation-Title"   value="Skandium Extras Library Examples"/>
+		    		<attribute name="Implementation-Version" value="${skandium.version}"/>
+		    	</manifest>
+		</jar>
 	</target>
 
 	<target name="tar.development" description="Create bundle file">

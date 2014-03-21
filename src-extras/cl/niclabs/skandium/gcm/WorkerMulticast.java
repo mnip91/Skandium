@@ -1,14 +1,15 @@
 package cl.niclabs.skandium.gcm;
 
-import java.util.List;
-
 import org.objectweb.proactive.core.component.type.annotations.multicast.MethodDispatchMetadata;
 import org.objectweb.proactive.core.component.type.annotations.multicast.ParamDispatchMetadata;
 import org.objectweb.proactive.core.component.type.annotations.multicast.ParamDispatchMode;
+import cl.niclabs.skandium.gcm.taskheader.TaskHeader;
+
 
 public interface WorkerMulticast {
 
-	@MethodDispatchMetadata(mode = @ParamDispatchMetadata(mode = ParamDispatchMode.ROUND_ROBIN))
-	public void doTask(List<TaskHead> head);
+	@MethodDispatchMetadata(mode = @ParamDispatchMetadata(mode = ParamDispatchMode.CUSTOM, customMode=TaskDispatch.class))
+	//@MethodDispatchMetadata(mode = @ParamDispatchMetadata(mode = ParamDispatchMode.BROADCAST))
+	public void doTask(TaskHeader head);
 
 }

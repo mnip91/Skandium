@@ -1,6 +1,8 @@
 package cl.niclabs.skandium.gcm;
 
-public interface SkandiumComponentController {
+import java.io.Serializable;
+
+public interface SkandiumComponentController extends Serializable {
 
 	public void setMaxThreads(int maxThreads);
 	
