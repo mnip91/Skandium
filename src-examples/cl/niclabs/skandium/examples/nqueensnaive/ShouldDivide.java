@@ -30,6 +30,6 @@ public class ShouldDivide implements Condition<Board> {
 	@Override
 	public boolean condition(Board p){
 
-		return p.depth > threshold;
+		return p.depth < threshold;
 	}
 }
