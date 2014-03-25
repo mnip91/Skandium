@@ -1,4 +1,4 @@
-package cl.niclabs.skandium.gcm.examples.nqueensnaive;
+package cl.niclabs.skandium.examples.gcmnqueens;
 
 public interface NQueens extends Runnable {
 

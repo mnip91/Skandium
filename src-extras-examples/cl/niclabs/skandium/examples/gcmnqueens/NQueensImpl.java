@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License
  *   along with Skandium.  If not, see <http://www.gnu.org/licenses/>.
  */
-package cl.niclabs.skandium.gcm.examples.nqueensnaive;
+package cl.niclabs.skandium.examples.gcmnqueens;
 
 import java.util.Random;
 
@@ -53,9 +53,9 @@ public class NQueensImpl implements NQueens, ResultReceiver, PABindingController
     public void run() {
        
 
-    	
+    	System.out.println("------------------------------------------------\n-");
     	System.out.println("Computing NQueens board="+ BOARD+" depth="+DEPTH+ ".");
-    	
+    	System.out.println("-\n------------------------------------------------");
     	//1. Define the skeleton program structure
     	 Skeleton<Board, Count> subskel = new DaC<Board, Count>(   //We use a divide and conquer skeleton pattern
     			 new ShouldDivide(DEPTH),  //Dive until the depth is "N-3" 
@@ -74,8 +74,9 @@ public class NQueensImpl implements NQueens, ResultReceiver, PABindingController
 	@Override
 	public void receive(Object result) {
         Count count = (Count) result;
-        System.out.println(count + " in " 
-        		+ (System.currentTimeMillis() - time) + "[ms]");
+        System.out.println("------------------------------------------------\n-");
+        System.out.println(count + " in " + (System.currentTimeMillis() - time) + "[ms]");
+        System.out.println("-\n------------------------------------------------");
 	}
 
 	@Override
