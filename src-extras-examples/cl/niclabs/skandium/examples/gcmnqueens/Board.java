@@ -6,6 +6,7 @@ public class Board implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private int[] board;
+	private int solutions;
 
 	//
 	// If the Board is of size N then:
@@ -34,6 +35,7 @@ public class Board implements Serializable {
 	 */
 	public Board(int size) {
 		board = new int[size + 1];
+		solutions = 0;
 	}
 
 	/**
@@ -94,4 +96,16 @@ public class Board implements Serializable {
 		return copy;
 	}
 
+	public void increase() {
+		solutions++;
+	}
+
+	public void add(Board board) {
+		solutions += board.getSolutions();
+	}
+	
+	public int getSolutions() {
+		return solutions;
+	}
+	
 }

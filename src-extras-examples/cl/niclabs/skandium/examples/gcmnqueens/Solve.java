@@ -2,31 +2,31 @@ package cl.niclabs.skandium.examples.gcmnqueens;
 
 import cl.niclabs.skandium.muscles.Execute;
 
-public class Solve implements Execute<Board, Count> {
+public class Solve implements Execute<Board, Board> {
 
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public Count execute(Board board) throws Exception {
+	public Board execute(Board board) throws Exception {
 		return place(board, board.getDepth() + 1);
 	}
 
-	private Count place(Board board, int col) {
-		Count count = new Count();
+	private Board place(Board board, int col) {
+		Board result = new Board(board.getSize());
 		for (int row = 1; row <= board.getSize(); row++) {
 			if (safe(board, col, row)) {
 				if (col == board.getSize()) {
-					count.increase();
-					break; // --- ??
+					result.increase();
+					break;
 				}
 				else {
 					board.putQueen(col, row);
-					count.add(place(board, col + 1));
+					result.add(place(board, col + 1));
 					board.removeQueen(col);
 				}
 			}
 		}
-		return count;
+		return result;
 	}
 
 	static boolean safe(Board board, int col, int row) {

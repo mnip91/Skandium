@@ -31,7 +31,7 @@ import cl.niclabs.skandium.system.events.SkandiumEventRegistry;
  */
 public class Skandium {
 
-	TaskExecutor executor;
+	protected TaskExecutor executor;
 	private static Skandium singleton = null;
 	private SkandiumEventRegistry eregis;
 	private int maxThreads;

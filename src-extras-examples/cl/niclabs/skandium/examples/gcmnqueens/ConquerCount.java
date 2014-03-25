@@ -2,18 +2,18 @@ package cl.niclabs.skandium.examples.gcmnqueens;
 
 import cl.niclabs.skandium.muscles.Merge;
 
-public class ConquerCount implements Merge<Count, Count> {
+public class ConquerCount implements Merge<Board, Board> {
 
 	private static final long serialVersionUID = 1L;
 	
 	
 	@Override
-	public Count merge(Count[] counts) throws Exception {
-		Count count = new Count();
-		for (Count c : counts) {
-			count.add(c);
+	public Board merge(Board[] boards) throws Exception {
+		Board result = new Board(boards[0].getSize());
+		for (Board b : boards) {
+			result.add(b);
 		}
-		return count;
+		return result;
 	}
 
 }

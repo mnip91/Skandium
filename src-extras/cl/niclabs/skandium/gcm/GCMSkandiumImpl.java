@@ -13,11 +13,14 @@ import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.component.body.ComponentInitActive;
 import org.objectweb.proactive.extensions.dataspaces.Utils;
 
+import cl.niclabs.skandium.Skandium;
+import cl.niclabs.skandium.autonomic.AutonomicThreads;
 import cl.niclabs.skandium.gcm.taskheader.NullTaskHeader;
 import cl.niclabs.skandium.gcm.taskheader.TaskHeader;
 import cl.niclabs.skandium.skeletons.Skeleton;
 import cl.niclabs.skandium.system.StackBuilder;
 import cl.niclabs.skandium.system.Task;
+import cl.niclabs.skandium.system.TaskExecutor;
 
 
 public class GCMSkandiumImpl implements GCMSkandium, 
@@ -32,23 +35,31 @@ public class GCMSkandiumImpl implements GCMSkandium,
 	private ResultReceiver scrr;
 	
 	// Internal Resources
-	private GCMSTaskExecutor executor;
+	private GCMSTaskExecutor gcmexecutor;
 	private DistributionRegistry registry; 
 	
 	private final boolean VERBOSE = true;
 
 	@Override
 	public <P extends Serializable, R extends Serializable> void execute(Skeleton<P, R> skeleton, P param) {
+
+		class InternalGCMSkandium extends Skandium {
+			public void setExecutor(TaskExecutor te) { executor = te; }
+ 		}
+		
+		InternalGCMSkandium igcms = new InternalGCMSkandium();
+		igcms.setExecutor(gcmexecutor);
+		AutonomicThreads.start(igcms, skeleton);
 		
 		StackBuilder builder = new StackBuilder();
 		skeleton.accept(builder);
 		
-		Task task = new Task(param, builder.stack, executor);
+		Task task = new Task(param, builder.stack, gcmexecutor);
 		if(VERBOSE) {
 			System.out.println("Task from user accepted on " + Utils.getHostname());
 		}
 
-		executor.execute(task);
+		gcmexecutor.execute(task);
 	}
 
 	// As Worker
@@ -64,11 +75,11 @@ public class GCMSkandiumImpl implements GCMSkandium,
 		}
 	
 		try {
-			Task task = registry.registerReceivedTask(head, executor);
+			Task task = registry.registerReceivedTask(head, gcmexecutor);
 			if(VERBOSE) {
 				System.out.println("Task received on " + Utils.getHostname());
 			}
-			executor.execute(task);
+			gcmexecutor.execute(task);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -140,13 +151,13 @@ public class GCMSkandiumImpl implements GCMSkandium,
 	
 	@Override
 	public void setMaxThreads(int maxThreads) {
-		executor.setMaximumPoolSize(maxThreads);
+		gcmexecutor.setMaximumPoolSize(maxThreads);
 	}
 
 
 	@Override
 	public void setDelegationCondition(DelegationCondition condition) {
-		executor.setDelegationCondition(condition);
+		gcmexecutor.setDelegationCondition(condition);
 	}
 	
 	
@@ -155,12 +166,12 @@ public class GCMSkandiumImpl implements GCMSkandium,
 	@Override
 	public void startFc() throws IllegalLifeCycleException {
 		registry = new DistributionRegistry();
-		executor = new GCMSTaskExecutor(Runtime.getRuntime().availableProcessors(), new PriorityBlockingQueue<Runnable>(), this);
+		gcmexecutor = new GCMSTaskExecutor(Runtime.getRuntime().availableProcessors(), new PriorityBlockingQueue<Runnable>(), this);
 	}
 
 	@Override
 	public void stopFc() throws IllegalLifeCycleException {
-		executor.shutdown();
+		gcmexecutor.shutdown();
 	}
 	
 	@Override

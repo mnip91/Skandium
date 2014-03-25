@@ -17,9 +17,11 @@
  */
 package cl.niclabs.skandium.system.events;
 
+import java.io.Serializable;
+
 /**
  * Root interface that is implemented for all Skandium event listeners.
  */
-public interface SkandiumEventListener extends java.util.EventListener, Comparable<SkandiumEventListener>  {
+public interface SkandiumEventListener extends java.util.EventListener, Comparable<SkandiumEventListener>, Serializable  {
 
 }

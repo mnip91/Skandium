@@ -27,8 +27,6 @@ import cl.niclabs.skandium.gcm.GCMSConstants;
 import cl.niclabs.skandium.gcm.ResultReceiver;
 import cl.niclabs.skandium.gcm.GCMSkandium;
 import cl.niclabs.skandium.skeletons.Map;
-import cl.niclabs.skandium.skeletons.DaC;
-import cl.niclabs.skandium.skeletons.Skeleton;
 
 /**
  * The main class to execute a naive NQueens counting algorithm which does not consider board symmetries.
@@ -51,31 +49,20 @@ public class NQueensImpl implements NQueens, ResultReceiver, PABindingController
 	}
 
     public void run() {
-       
-
     	System.out.println("------------------------------------------------\n-");
     	System.out.println("Computing NQueens board="+ BOARD+" depth="+DEPTH+ ".");
     	System.out.println("-\n------------------------------------------------");
-    	//1. Define the skeleton program structure
-    	 Skeleton<Board, Count> subskel = new DaC<Board, Count>(   //We use a divide and conquer skeleton pattern
-    			 new ShouldDivide(DEPTH),  //Dive until the depth is "N-3" 
-    			 new DivideBoard(), 
-    			 new Solve(), 
-    			 new ConquerCount());
-    	
-    	 Skeleton<Board, Count> nqueens = //Always subdivide the first row.
-    		 new Map<Board, Count>(new DivideBoard(), subskel, new ConquerCount());
-    	 
-    	 gcmskandium.execute(nqueens, new Board(BOARD));
-         
-         time = System.currentTimeMillis();        
+    	Map<Board, Board> subskel = new Map<Board, Board>(new DivideBoard(), new Solve(), new ConquerCount());
+		Map<Board, Board> skel = new Map<Board, Board>(new DivideBoard(), subskel, new ConquerCount());
+		gcmskandium.execute(skel, new Board(BOARD));
+		time = System.currentTimeMillis();        
     }
 
 	@Override
 	public void receive(Object result) {
-        Count count = (Count) result;
+		Board board = (Board) result;
         System.out.println("------------------------------------------------\n-");
-        System.out.println(count + " in " + (System.currentTimeMillis() - time) + "[ms]");
+        System.out.println(board.getSolutions() + " in " + (System.currentTimeMillis() - time) + "[ms]");
         System.out.println("-\n------------------------------------------------");
 	}
 

@@ -2,6 +2,7 @@ package cl.niclabs.skandium.examples.gcmnqueens;
 
 import java.io.File;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -23,6 +24,7 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
 import cl.niclabs.skandium.Skandium;
 import cl.niclabs.skandium.Stream;
+import cl.niclabs.skandium.autonomic.AutonomicThreads;
 import cl.niclabs.skandium.gcm.DelegationCondition;
 import cl.niclabs.skandium.gcm.GCMSConstants;
 import cl.niclabs.skandium.gcm.GCMSkandium;
@@ -30,9 +32,7 @@ import cl.niclabs.skandium.gcm.GCMSkandiumBuilder;
 import cl.niclabs.skandium.gcm.ResultReceiver;
 import cl.niclabs.skandium.gcm.SkandiumComponentController;
 import cl.niclabs.skandium.muscles.Muscle;
-import cl.niclabs.skandium.skeletons.DaC;
 import cl.niclabs.skandium.skeletons.Map;
-import cl.niclabs.skandium.skeletons.Skeleton;
 import cl.niclabs.skandium.skeletons.While;
 
 
@@ -140,57 +140,24 @@ public class Main {
 	}
 
 	static private void normalExecution(int BOARD_SIZE, int DEPTH) throws InterruptedException, ExecutionException {
-    	
-        //Controller ctrl = new Controller(0.5d,2d,0.5d,1000000l,true);
-		
-		//We use a divide and conquer skeleton pattern
 
-    	Skeleton<Board, Count> subskel = new DaC<Board, Count>(   
-   			 new ShouldDivide(DEPTH),
-   			 new DivideBoard(), 
-   			 new Solve(), 
-   			 new ConquerCount());
-
-    	
-   	 	//Always subdivide the first row.
-   	 	Map<Board, Count> nqueens = new Map<Board, Count>(new DivideBoard(), subskel, new ConquerCount());
-   	 	
-   	 	
-   	 	//nqueens.addGeneric(ctrl, Skeleton.class, null, null);
-   	 	//Thread.sleep(2000);
-   	 	
-   	 	Board input = new Board(BOARD_SIZE);
-   	 	
-        Skandium skandium = new Skandium(Runtime.getRuntime().availableProcessors());
-   	 	Stream<Board, Count> stream = skandium.newStream(nqueens);
-
+		Map<Board, Board> subskel = new Map<Board, Board>(new DivideBoard(), new Solve(), new ConquerCount());
+		Map<Board, Board> skel = new Map<Board, Board>(new DivideBoard(), subskel, new ConquerCount());
+   	 	Skandium skandium = new Skandium(Runtime.getRuntime().availableProcessors());
+		AutonomicThreads.start(skandium, skel,
+				AutonomicThreads.DEFAULT_POLL_CHECK,
+				new HashMap<Muscle<?, ?>, Long>(),
+				new HashMap<Muscle<?, ?>, Integer>(), AutonomicThreads.RHO,
+				AutonomicThreads.DEFAULT_WALL_CLOCK_TIME_GOAL,
+				Runtime.getRuntime().availableProcessors() * 2, true);  	 
+   	 	Thread.sleep(2000);
 		long init = System.currentTimeMillis();
-	
-        Future<Count> future = stream.input(input);
-        Count result = future.get();
-        
-        System.out.println(result.getValue() +" in "+(System.currentTimeMillis() - init)+"[ms]");
-        
-        
-        //java.util.Map<Muscle<?,?>,MovingAverage[]> mats = ctrl.getMATs();
-        //java.util.Map<Muscle<?,?>,MovingAverage[]> mals = ctrl.getMALs();
-        //printMAs(mats,"mats");
-        //printMAs(mals,"mals");
-        
-        
+		Stream<Board, Board> stream = skandium.newStream(skel);
+        Future<Board> future = stream.input(new Board(BOARD_SIZE));
+        Board result = future.get();
+        System.out.println(result.getSolutions() +" in "+(System.currentTimeMillis() - init)+"[ms]");
         
         skandium.shutdown();
 	}
-	
-	private static void printMAs( java.util.Map<Muscle<?, ?>, MovingAverage[]> MAS, String masS) {
-		for (java.util.Map.Entry<Muscle<?, ?>, MovingAverage[]> entry : MAS.entrySet()) {
-			Muscle<?, ?> m = entry.getKey();
-			MovingAverage[] mas = entry.getValue();
-			for (int j = 0; j < mas.length; j++) {
-				double[] rms = mas[j].rootMeanSquare();
-				System.out.println(masS + "," + m + "," + mas[j] + "," + String.format("%1$f,%2$f", rms[0], rms[1]));
-			}
-		}
-	}
- 
+
 }
