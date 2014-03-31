@@ -20,6 +20,8 @@ package cl.niclabs.skandium.skeletons;
 import java.io.Serializable;
 import java.util.concurrent.Future;
 
+import cl.niclabs.skandium.muscles.Muscle;
+
 /**
  * A <code>Skeleton</code> is the API for a parallelism pattern.
  * 
@@ -50,4 +52,6 @@ public interface Skeleton<P,R> extends Serializable {
 	 * The i-th element of the array represents the i-th element of the input array. 
 	 */
 	public Future<R>[] input(P[] param);
+	
+	public Muscle<?,?>[] getMuscles();
 }

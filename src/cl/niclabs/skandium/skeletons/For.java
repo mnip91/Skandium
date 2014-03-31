@@ -17,6 +17,9 @@
  */
 package cl.niclabs.skandium.skeletons;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import cl.niclabs.skandium.muscles.Execute;
 import cl.niclabs.skandium.muscles.Muscle;
 
@@ -68,6 +71,13 @@ public class For<P> extends AbstractSkeleton<P,P> {
 
 	public int getTimes() {
 		return times;
+	}
+	
+	@Override
+	public Muscle<?,?>[] getMuscles() {
+		ArrayList<Muscle<?,?>> muscles = new ArrayList<Muscle<?,?>>();
+		muscles.addAll(Arrays.asList(getSubskel().getMuscles()));
+		return muscles.toArray(new Muscle<?,?>[muscles.size()]);
 	}
     
 }

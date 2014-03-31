@@ -18,8 +18,10 @@
 
 package cl.niclabs.skandium.autonomic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * An state is composed by tree attributes
@@ -32,7 +34,7 @@ import java.util.List;
  * @author Gustavo Pabon &lt;gustavo.pabon&#64;gmail.com&gt;
  *
  */
-class State {
+class State implements Serializable {
 	
 	/*
 	 * List of out-bound transitions
@@ -52,7 +54,7 @@ class State {
 	private StateType type;
 	
 	State(StateType type) {
-		transitions = new ArrayList<Transition>();
+		transitions = new CopyOnWriteArrayList<Transition>();
 		this.isPersistent = false;
 		this.type = type;
 	}

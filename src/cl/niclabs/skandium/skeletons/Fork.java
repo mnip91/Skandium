@@ -17,11 +17,15 @@
  */
 package cl.niclabs.skandium.skeletons;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import cl.niclabs.skandium.events.IndexListener;
 import cl.niclabs.skandium.events.When;
 import cl.niclabs.skandium.events.Where;
 import cl.niclabs.skandium.muscles.Execute;
 import cl.niclabs.skandium.muscles.Merge;
+import cl.niclabs.skandium.muscles.Muscle;
 import cl.niclabs.skandium.muscles.Split;
 
 /**
@@ -128,5 +132,15 @@ public class Fork<P,R> extends AbstractSkeleton<P,R> {
 
     public Skeleton<?, ?>[] getSkeletons() {
 		return skeletons;
+	}
+    
+	@Override
+	public Muscle<?,?>[] getMuscles() {
+		ArrayList<Muscle<?,?>> muscles = new ArrayList<Muscle<?,?>>();
+		muscles.add(getSplit());
+		for (Skeleton<?,?> skel : skeletons)
+			muscles.addAll(Arrays.asList(skel.getMuscles()));
+		muscles.add(getMerge());
+		return muscles.toArray(new Muscle<?,?>[muscles.size()]);
 	}
 }

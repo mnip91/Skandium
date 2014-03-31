@@ -18,6 +18,7 @@
 
 package cl.niclabs.skandium.autonomic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,7 +33,9 @@ import cl.niclabs.skandium.muscles.Muscle;
  * @author Gustavo Pabon &lt;gustavo.pabon&#64;gmail.com&gt;
  *
  */
-class Activity {
+class Activity implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * UDEF, constant that represents the value "undefined" for time variables

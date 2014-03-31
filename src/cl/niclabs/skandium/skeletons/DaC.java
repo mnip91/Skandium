@@ -17,6 +17,9 @@
  */
 package cl.niclabs.skandium.skeletons;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import cl.niclabs.skandium.events.ParentConditionListener;
 import cl.niclabs.skandium.events.ParentListener;
 import cl.niclabs.skandium.events.When;
@@ -24,6 +27,7 @@ import cl.niclabs.skandium.events.Where;
 import cl.niclabs.skandium.muscles.Condition;
 import cl.niclabs.skandium.muscles.Execute;
 import cl.niclabs.skandium.muscles.Merge;
+import cl.niclabs.skandium.muscles.Muscle;
 import cl.niclabs.skandium.muscles.Split;
 
 /**
@@ -142,6 +146,16 @@ public class DaC<P,R> extends AbstractSkeleton<P,R> {
 
     public Skeleton<?, ?> getSkeleton() {
 		return skeleton;
+	}
+
+	@Override
+	public Muscle<?,?>[] getMuscles() {
+		ArrayList<Muscle<?,?>> muscles = new ArrayList<Muscle<?,?>>();
+		muscles.add(getCondition());
+		muscles.add(getSplit());
+		muscles.addAll(Arrays.asList(getSkeleton().getMuscles()));
+		muscles.add(getMerge());
+		return muscles.toArray(new Muscle<?,?>[muscles.size()]);
 	}
     
 }

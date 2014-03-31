@@ -1,12 +1,15 @@
 package cl.niclabs.skandium.gcm;
 
+import java.io.Serializable;
 import java.util.concurrent.ConcurrentHashMap;
 
 import cl.niclabs.skandium.gcm.taskheader.ExecutableTaskHeader;
 import cl.niclabs.skandium.gcm.taskheader.TaskHeader;
 import cl.niclabs.skandium.system.Task;
 
-public class DistributionRegistry {
+public class DistributionRegistry implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private ConcurrentHashMap<Long, Task> transmitted;
 	private ConcurrentHashMap<Long, TaskHeader> received;

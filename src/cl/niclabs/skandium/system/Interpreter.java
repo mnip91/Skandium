@@ -17,6 +17,7 @@
  */
 package cl.niclabs.skandium.system;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -32,7 +33,7 @@ import cl.niclabs.skandium.system.Task;
  * 
  * @author mleyton
  */
-public class Interpreter {
+public class Interpreter implements Serializable {
 	
 	/**
 	 * This is the main interpretation method.

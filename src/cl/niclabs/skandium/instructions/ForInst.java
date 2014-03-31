@@ -80,5 +80,13 @@ public class ForInst extends AbstractInstruction{
 		}		
 		super.setParent(parent);
 	}
+
+	@Override
+	public void removeSkeletonStrace() {
+		strace = new Skeleton[0];
+		for (Instruction i : substack) {
+			i.removeSkeletonStrace();
+		}
+	}
 	
 }

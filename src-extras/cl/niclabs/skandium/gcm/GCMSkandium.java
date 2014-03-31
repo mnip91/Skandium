@@ -18,6 +18,6 @@ public interface GCMSkandium {
 	 * @param skeleton
 	 * @param param
 	 */
-	public <P extends Serializable, R extends Serializable> void execute(Skeleton<P,R> skeleton, P param);
+	public <P extends Serializable, R extends Serializable> void execute(Skeleton<P,R> skeleton, P param, Boolean autonomic);
 
 }

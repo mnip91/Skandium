@@ -141,16 +141,17 @@ public class Main {
 
 	static private void normalExecution(int BOARD_SIZE, int DEPTH) throws InterruptedException, ExecutionException {
 
-		Map<Board, Board> subskel = new Map<Board, Board>(new DivideBoard(), new Solve(), new ConquerCount());
-		Map<Board, Board> skel = new Map<Board, Board>(new DivideBoard(), subskel, new ConquerCount());
+		
+		System.out.println("iniciando normal ejecucion " + BOARD_SIZE + " " + DEPTH);
+		Map<Board, Board> skel = new Map<Board, Board>(new DivideBoardV2(), new Solve(), new ConquerCount());
    	 	Skandium skandium = new Skandium(Runtime.getRuntime().availableProcessors());
-		AutonomicThreads.start(skandium, skel,
-				AutonomicThreads.DEFAULT_POLL_CHECK,
-				new HashMap<Muscle<?, ?>, Long>(),
-				new HashMap<Muscle<?, ?>, Integer>(), AutonomicThreads.RHO,
-				AutonomicThreads.DEFAULT_WALL_CLOCK_TIME_GOAL,
-				Runtime.getRuntime().availableProcessors() * 2, true);  	 
-   	 	Thread.sleep(2000);
+		//AutonomicThreads.start(skandium, skel,
+		//		AutonomicThreads.DEFAULT_POLL_CHECK,
+		//		new HashMap<Muscle<?, ?>, Long>(),
+		//		new HashMap<Muscle<?, ?>, Integer>(), AutonomicThreads.RHO,
+		//		AutonomicThreads.DEFAULT_WALL_CLOCK_TIME_GOAL,
+		//		Runtime.getRuntime().availableProcessors() * 2, true);  	 
+   	 	//Thread.sleep(2000);
 		long init = System.currentTimeMillis();
 		Stream<Board, Board> stream = skandium.newStream(skel);
         Future<Board> future = stream.input(new Board(BOARD_SIZE));

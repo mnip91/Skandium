@@ -52,9 +52,8 @@ public class NQueensImpl implements NQueens, ResultReceiver, PABindingController
     	System.out.println("------------------------------------------------\n-");
     	System.out.println("Computing NQueens board="+ BOARD+" depth="+DEPTH+ ".");
     	System.out.println("-\n------------------------------------------------");
-    	Map<Board, Board> subskel = new Map<Board, Board>(new DivideBoard(), new Solve(), new ConquerCount());
-		Map<Board, Board> skel = new Map<Board, Board>(new DivideBoard(), subskel, new ConquerCount());
-		gcmskandium.execute(skel, new Board(BOARD));
+		Map<Board, Board> skel = new Map<Board, Board>(new DivideBoardV2(), new Solve(), new ConquerCount());
+		gcmskandium.execute(skel, new Board(BOARD), true);
 		time = System.currentTimeMillis();        
     }
 

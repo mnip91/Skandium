@@ -69,6 +69,8 @@ import cl.niclabs.skandium.skeletons.While;
  */
 class SGenerator implements SkeletonVisitor {
 
+	private static final long serialVersionUID = 1L;
+
 	/*
 	 * Initial transition who its destination state is the initial 
 	 * state of the state machine created.

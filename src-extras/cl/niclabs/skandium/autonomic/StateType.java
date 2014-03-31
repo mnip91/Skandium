@@ -18,13 +18,15 @@
 
 package cl.niclabs.skandium.autonomic;
 
+import java.io.Serializable;
+
 /**
  * Enumeration of Types of States
  * 
  * @author Gustavo Pabon &lt;gustavo.pabon&#64;gmail.com&gt;
  *
  */
-enum StateType {
+enum StateType implements Serializable {
 	/**
 	 * Initial state for all skeletons
 	 */

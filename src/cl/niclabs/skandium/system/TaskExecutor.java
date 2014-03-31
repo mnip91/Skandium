@@ -30,6 +30,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class TaskExecutor extends ThreadPoolExecutor {
 	
+	public TaskExecutor() {
+		super(1, 1, 10, TimeUnit.MILLISECONDS, new PriorityBlockingQueue<Runnable>());
+	}
+
 	/**
 	 * Constructs a <code>TaskExecutor</code> with a maximum number of threads.
 	 * @param maxThreads The number maximum number of threads to use.

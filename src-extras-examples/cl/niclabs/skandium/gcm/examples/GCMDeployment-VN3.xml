@@ -18,7 +18,7 @@
 	    </hosts>
 	
 	    <groups>
-	        <sshGroup id="group3" hostList="apcoubi" />
+	        <sshGroup id="group3" hostList="rubik" />
 	    </groups>
 	</infrastructure>
 

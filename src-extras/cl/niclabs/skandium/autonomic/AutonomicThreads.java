@@ -18,6 +18,7 @@
 
 package cl.niclabs.skandium.autonomic;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import cl.niclabs.skandium.Skandium;
@@ -59,7 +60,7 @@ import cl.niclabs.skandium.skeletons.AbstractSkeleton;
  * 
  * @author Gustavo Pabon &lt;gustavo.pabon&#64;gmail.com&gt;
  */
-public class AutonomicThreads {
+public class AutonomicThreads implements Serializable {
 	
 	/**
 	 * DEFAULT_POLL_CHECK is the default value poll interval for the

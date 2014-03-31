@@ -24,6 +24,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Stack;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import cl.niclabs.skandium.Skandium;
 import cl.niclabs.skandium.events.GenericListener;
@@ -47,7 +49,7 @@ import cl.niclabs.skandium.skeletons.While;
  * @author Gustavo Pabon &lt;gustavo.pabon&#64;gmail.com&gt;
  *
  */
-class Controller extends GenericListener {
+public class Controller extends GenericListener {
 	
 	/*
 	 * List of active state on the active state machines
@@ -223,7 +225,7 @@ class Controller extends GenericListener {
 		 * initialAct (initial DAG) is initialized with the initial activity
 		 * created during the creation of the State Machine. 
 		 */
-		active = new ArrayList<State>();
+		active = new CopyOnWriteArrayList<State>();
 		active.add(I);
 		initialAct = visitor.getInitialAct();
 		/*
@@ -308,8 +310,7 @@ class Controller extends GenericListener {
 		 * The following line creates the transition identifier 
 		 * (TransitionLabel) related to the event that is just raised. 
 		 */
-		TransitionLabel event = new TransitionLabel(new SMHead(trace),when,
-				where, cond);
+		TransitionLabel event = new TransitionLabel(new SMHead(trace),when, where, cond);
 		/*
 		 * It is possible that an event could match more than one transition,
 		 * this is the case, for example, after a split on a map the possible
@@ -325,8 +326,7 @@ class Controller extends GenericListener {
 		 * possible transitions that matches the event, sorted in areIn, with
 		 * its corresponding soruce state, from the list of active states.
 		 */
-		HashMap<Transition,State> fromTransToState = 
-				new HashMap<Transition,State>();
+		HashMap<Transition,State> fromTransToState = new HashMap<Transition,State>();
 		PriorityQueue<Transition> areIn = new PriorityQueue<Transition>() ;
 		for (State s: active) {
 			for(Transition t: s.getTransitions(event)) {
@@ -346,10 +346,14 @@ class Controller extends GenericListener {
 				t = areIn.poll();
 				if (t.isTheOne(index,parent)) found=true;
 			}
-			if(found==false) throw 
-			new RuntimeException("Event not expected, should not be here! " +
-			strace[strace.length-1] + " " + when + " " + where + " " + cond + 
-			"" + index);
+			if(found==false) {
+				System.out.println("[DEBUG] index = " + index + " parent = " + parent
+						+ " [" + when + " " + where + "]\n");
+				throw new RuntimeException(
+						"Event not expected, should not be here! "
+								+ strace[strace.length - 1] + " " + when + " "
+								+ where + " " + cond + "" + index);
+			}
 		}
 		/*
 		 * The from state is removed from the active state's structure only if

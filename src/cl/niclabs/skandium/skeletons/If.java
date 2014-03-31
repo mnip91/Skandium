@@ -17,12 +17,16 @@
  */
 package cl.niclabs.skandium.skeletons;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import cl.niclabs.skandium.events.ConditionListener;
 import cl.niclabs.skandium.events.IndexListener;
 import cl.niclabs.skandium.events.When;
 import cl.niclabs.skandium.events.Where;
 import cl.niclabs.skandium.muscles.Condition;
 import cl.niclabs.skandium.muscles.Execute;
+import cl.niclabs.skandium.muscles.Muscle;
 
 /**
  * An <code>If</code> {@link cl.niclabs.skandium.skeletons.Skeleton} represents condition branching.
@@ -97,5 +101,14 @@ public class If<P,R> extends AbstractSkeleton<P,R> {
 
 	public Skeleton<P, R> getFalseCase() {
 		return falseCase;
+	}
+	
+	@Override
+	public Muscle<?,?>[] getMuscles() {
+		ArrayList<Muscle<?,?>> muscles = new ArrayList<Muscle<?,?>>();
+		muscles.add(getCondition());
+		muscles.addAll(Arrays.asList(getTrueCase().getMuscles()));
+		muscles.addAll(Arrays.asList(getFalseCase().getMuscles()));
+		return muscles.toArray(new Muscle<?,?>[muscles.size()]);
 	}
 }

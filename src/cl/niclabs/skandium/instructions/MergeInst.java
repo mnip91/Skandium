@@ -67,4 +67,9 @@ public class MergeInst extends AbstractInstruction{
 		
 		return new MergeInst(merge, copySkeletonTrace());
 	}
+	
+	@Override
+	public void removeSkeletonStrace() {
+		strace = new Skeleton[0];
+	}
 }

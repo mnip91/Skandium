@@ -101,4 +101,9 @@ public class EventInst extends AbstractInstruction {
 		return new EventInst(when, where, copySkeletonTrace(), id, cond, parent);
 	}
 
+	@Override
+	public void removeSkeletonStrace() {
+		strace = new Skeleton[0];
+	}
+
 }

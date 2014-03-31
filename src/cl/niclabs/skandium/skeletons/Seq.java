@@ -17,6 +17,9 @@
  */
 package cl.niclabs.skandium.skeletons;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import cl.niclabs.skandium.muscles.Execute;
 import cl.niclabs.skandium.muscles.Muscle;
 
@@ -48,4 +51,9 @@ public class Seq<P,R> extends AbstractSkeleton<P,R> {
         visitor.visit(this);
     }
 
+	@Override
+	public Muscle<?,?>[] getMuscles() {
+		return new Muscle<?,?>[] {execute};
+	}
+	
 }

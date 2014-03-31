@@ -67,4 +67,9 @@ public class SeqInst extends AbstractInstruction {
 	
 		return new SeqInst(execute, copySkeletonTrace());
 	}
+	
+	@Override
+	public void removeSkeletonStrace() {
+		strace = new Skeleton[0];
+	}
 }

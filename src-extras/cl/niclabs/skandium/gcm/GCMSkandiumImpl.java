@@ -2,6 +2,7 @@ package cl.niclabs.skandium.gcm;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 
@@ -13,10 +14,12 @@ import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.component.body.ComponentInitActive;
 import org.objectweb.proactive.extensions.dataspaces.Utils;
 
-import cl.niclabs.skandium.Skandium;
-import cl.niclabs.skandium.autonomic.AutonomicThreads;
+import cl.niclabs.skandium.gcm.autonomic.AutonomicThreads;
+import cl.niclabs.skandium.gcm.autonomic.Controller;
 import cl.niclabs.skandium.gcm.taskheader.NullTaskHeader;
 import cl.niclabs.skandium.gcm.taskheader.TaskHeader;
+import cl.niclabs.skandium.muscles.Muscle;
+import cl.niclabs.skandium.skeletons.AbstractSkeleton;
 import cl.niclabs.skandium.skeletons.Skeleton;
 import cl.niclabs.skandium.system.StackBuilder;
 import cl.niclabs.skandium.system.Task;
@@ -37,19 +40,26 @@ public class GCMSkandiumImpl implements GCMSkandium,
 	// Internal Resources
 	private GCMSTaskExecutor gcmexecutor;
 	private DistributionRegistry registry; 
+	private int maxThreads;
+	
+	Controller autonomicController;
 	
 	private final boolean VERBOSE = true;
 
 	@Override
-	public <P extends Serializable, R extends Serializable> void execute(Skeleton<P, R> skeleton, P param) {
+	public <P extends Serializable, R extends Serializable> void execute(Skeleton<P, R> skeleton, P param, Boolean autonomic) {
 
-		class InternalGCMSkandium extends Skandium {
-			public void setExecutor(TaskExecutor te) { executor = te; }
- 		}
-		
-		InternalGCMSkandium igcms = new InternalGCMSkandium();
-		igcms.setExecutor(gcmexecutor);
-		AutonomicThreads.start(igcms, skeleton);
+		if (autonomic) {
+			autonomicController = new Controller(skeleton, gcmexecutor,
+					maxThreads, AutonomicThreads.DEFAULT_POLL_CHECK,
+					new HashMap<Muscle<?, ?>, Long>(),
+					new HashMap<Muscle<?, ?>, Integer>(),
+					AutonomicThreads.RHO,
+					AutonomicThreads.DEFAULT_WALL_CLOCK_TIME_GOAL,
+					Runtime.getRuntime().availableProcessors() * 2,
+					false, this);
+			((AbstractSkeleton<?, ?>) skeleton).addGeneric(autonomicController, Skeleton.class, null, null);
+		}
 		
 		StackBuilder builder = new StackBuilder();
 		skeleton.accept(builder);
@@ -57,6 +67,7 @@ public class GCMSkandiumImpl implements GCMSkandium,
 		Task task = new Task(param, builder.stack, gcmexecutor);
 		if(VERBOSE) {
 			System.out.println("Task from user accepted on " + Utils.getHostname());
+			if (autonomic) System.out.println("[ Using AutonomicThreads ]");
 		}
 
 		gcmexecutor.execute(task);
@@ -68,9 +79,6 @@ public class GCMSkandiumImpl implements GCMSkandium,
 	public void doTask(TaskHeader head) {
 		
 		if(head instanceof NullTaskHeader) {
-			//if(VERBOSE) {
-			//	System.out.println("NullTask received on " + Utils.getHostname());
-			//}
 			return;
 		}
 	
@@ -165,8 +173,9 @@ public class GCMSkandiumImpl implements GCMSkandium,
 	
 	@Override
 	public void startFc() throws IllegalLifeCycleException {
+		maxThreads = Runtime.getRuntime().availableProcessors();
 		registry = new DistributionRegistry();
-		gcmexecutor = new GCMSTaskExecutor(Runtime.getRuntime().availableProcessors(), new PriorityBlockingQueue<Runnable>(), this);
+		gcmexecutor = new GCMSTaskExecutor(maxThreads, new PriorityBlockingQueue<Runnable>(), this);
 	}
 
 	@Override

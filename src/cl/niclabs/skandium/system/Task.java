@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 import java.util.concurrent.ExecutionException;
+import java.io.Serializable;
 import java.lang.reflect.Array;
 
 import cl.niclabs.skandium.instructions.Instruction;
@@ -34,7 +35,7 @@ import cl.niclabs.skandium.instructions.Instruction;
  * 
  * @author mleyton
  */
-public class Task implements Runnable, Comparable<Task>{
+public class Task implements Runnable, Comparable<Task>, Serializable {
 
 	static Random random = new Random();
 	
@@ -55,6 +56,8 @@ public class Task implements Runnable, Comparable<Task>{
 	boolean canceled;				//True if this task was canceled, false otherwise.
 	boolean notified;				//True if this task notified (gcm extension)
 
+	long predictedExecutionTime;
+	
 	/**
 	 * Constructs a root task, with its default priority.
 	 * 
@@ -364,5 +367,13 @@ public class Task implements Runnable, Comparable<Task>{
 	
 	public void setAsNotified() {
 		notified = true;
+	}
+	
+	public void setPredictedExecutionTime(long time) {
+		predictedExecutionTime = time;
+	}
+	
+	public long getPredictedExecutionTime() {
+		return predictedExecutionTime;
 	}
 }

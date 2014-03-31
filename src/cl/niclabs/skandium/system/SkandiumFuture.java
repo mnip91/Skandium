@@ -17,6 +17,7 @@
  */
 package cl.niclabs.skandium.system;
 
+import java.io.Serializable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -30,7 +31,7 @@ import java.util.concurrent.TimeoutException;
  *
  * @param <V> The type of the awaited object.
  */
-public class SkandiumFuture<V> implements Future<V> {
+public class SkandiumFuture<V> implements Future<V>, Serializable {
 
 	TaskExecutor executor;
 	Task task;

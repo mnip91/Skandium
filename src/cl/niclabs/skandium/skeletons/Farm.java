@@ -17,7 +17,11 @@
  */
 package cl.niclabs.skandium.skeletons;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import cl.niclabs.skandium.muscles.Execute;
+import cl.niclabs.skandium.muscles.Muscle;
 
 /**
  * A <code>Farm</code> {@link cl.niclabs.skandium.skeletons.Skeleton} provides task replication or master-worker like parallelism.
@@ -63,5 +67,10 @@ public class Farm<P,R> extends AbstractSkeleton<P,R> {
 		return subskel;
 	}
     
-    
+	@Override
+	public Muscle<?,?>[] getMuscles() {
+		ArrayList<Muscle<?,?>> muscles = new ArrayList<Muscle<?,?>>();
+		muscles.addAll(Arrays.asList(getSubskel().getMuscles()));
+		return muscles.toArray(new Muscle<?,?>[muscles.size()]);
+	}
 }

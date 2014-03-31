@@ -67,7 +67,7 @@ public class ChoiceInst extends AbstractInstruction {
 	public Instruction copy() {
 		return new ChoiceInst(cond, copyStack(trueCaseStack), copyStack(falseCaseStack), copySkeletonTrace());
 	}
-	
+
 	@Override
 	public void setParent(int parent) {
 		for (Instruction inst : trueCaseStack) {
@@ -82,5 +82,18 @@ public class ChoiceInst extends AbstractInstruction {
 		}
 		super.setParent(parent);
 	}
+
+	@Override
+	public void removeSkeletonStrace() {
+		strace = new Skeleton[0];
+		for (Instruction i : trueCaseStack) {
+			i.removeSkeletonStrace();
+		}
+		for (Instruction i : falseCaseStack) {
+			i.removeSkeletonStrace();
+		}
+	}
+
+
 
 }

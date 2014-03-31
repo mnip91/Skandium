@@ -94,4 +94,16 @@ public class IfInst extends AbstractInstruction {
 		}
 		super.setParent(parent);
 	}
+	
+	@Override
+	public void removeSkeletonStrace() {
+		strace = new Skeleton[0];
+		for (Instruction i : trueCaseStack) {
+			i.removeSkeletonStrace();
+		}
+		for (Instruction i : falseCaseStack) {
+			i.removeSkeletonStrace();
+		}
+	}
+	
 }

@@ -18,8 +18,10 @@
 
 package cl.niclabs.skandium.autonomic;
 
-import java.util.ArrayList;
+import java.io.Serializable;
+import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import cl.niclabs.skandium.skeletons.Skeleton;
 
@@ -42,7 +44,10 @@ import cl.niclabs.skandium.skeletons.Skeleton;
  * @author Gustavo Pabon &lt;gustavo.pabon&#64;gmail.com&gt;
  *
  */
-class SMHead {
+class SMHead implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Constant that represents an undefined index.
 	 */
@@ -97,19 +102,19 @@ class SMHead {
 	 * Sub SMHeads, for modeling nested relations and holds statuses of 
 	 * internal nested skeleton's instances
 	 */
-	private ArrayList<SMHead> subs;
+	private List<SMHead> subs;
 	
 	SMHead(Stack<Skeleton<?,?>> strace) {
 		this.strace = strace;
 		index = UDEF;
 		dacParent = UDEF;
 		currState = null;
-		subs = new ArrayList<SMHead>();
+		subs = new CopyOnWriteArrayList<SMHead>();
 	}
 	void setIndex(int index) {
 		this.index = index;
 	}
-	void setCurrentState(State currState) {
+	synchronized void setCurrentState(State currState) {
 		this.currState = currState;
 	}
 	void setDaCParent(int parent) {
@@ -154,7 +159,7 @@ class SMHead {
 	void addSub(SMHead sub) {
 		subs.add(sub);
 	}
-	ArrayList<SMHead> getSubs() {
+	List<SMHead> getSubs() {
 		return subs;
 	}
 	void setDaCDeep(int deep) {

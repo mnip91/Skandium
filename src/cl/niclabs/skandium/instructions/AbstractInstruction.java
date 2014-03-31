@@ -36,7 +36,7 @@ abstract class AbstractInstruction implements Instruction {
 	int id;
 
 	@SuppressWarnings("rawtypes")
-	final Skeleton[] strace;
+	Skeleton[] strace;
 	
 	AbstractInstruction(@SuppressWarnings("rawtypes") Skeleton[] strace){
 		this.strace = strace;
@@ -113,5 +113,4 @@ abstract class AbstractInstruction implements Instruction {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
 }

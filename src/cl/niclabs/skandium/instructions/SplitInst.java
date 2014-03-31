@@ -85,4 +85,14 @@ public class SplitInst extends AbstractInstruction {
 	public Instruction copy() {
 		return new SplitInst(substacks, merge, copySkeletonTrace(),id, parent);
 	}
+	
+	@Override
+	public void removeSkeletonStrace() {
+		strace = new Skeleton[0];
+		for (int j=0; j< substacks.size(); j++) {
+			for (Instruction i : substacks.get(j)) {
+				i.removeSkeletonStrace();
+			}
+		}
+	}
 }

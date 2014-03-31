@@ -98,4 +98,14 @@ public class ForkInst extends  AbstractInstruction {
 		}
 		super.setParent(parent);
 	}
+
+	@Override
+	public void removeSkeletonStrace() {
+		strace = new Skeleton[0];
+		for (int j=0; j< substacks.size(); j++) {
+			for (Instruction i : substacks.get(j)) {
+				i.removeSkeletonStrace();
+			}
+		}
+	}
 }

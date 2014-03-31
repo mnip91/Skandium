@@ -69,4 +69,6 @@ public interface Instruction extends Serializable {
 
 	public void setId(int id);
 	public int getId();
+	
+	public void removeSkeletonStrace();
 }

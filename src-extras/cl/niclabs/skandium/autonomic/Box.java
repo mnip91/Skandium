@@ -18,6 +18,8 @@
 
 package cl.niclabs.skandium.autonomic;
 
+import java.io.Serializable;
+
 /**
  * Box is an utility class that encloses a variable of type <T> into
  * a class in order to allow mutation on final variables or pass by reference
@@ -27,7 +29,10 @@ package cl.niclabs.skandium.autonomic;
  *
  * @param &lt;T&gt; Type of variable to be enclosed by the Box
  */
-class Box<T> {
+class Box<T> implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	private T var;
 	Box(T var) {
 		this.var = var;

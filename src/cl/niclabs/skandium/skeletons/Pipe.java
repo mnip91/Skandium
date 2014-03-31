@@ -17,7 +17,11 @@
  */
 package cl.niclabs.skandium.skeletons;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import cl.niclabs.skandium.muscles.Execute;
+import cl.niclabs.skandium.muscles.Muscle;
 
 /**
  * A <code></code> {@link cl.niclabs.skandium.skeletons.Skeleton}
@@ -54,5 +58,13 @@ public class Pipe<P,R> extends AbstractSkeleton<P,R> {
 
 	public Skeleton<?, R> getStage2() {
 		return stage2;
+	}
+	
+	@Override
+	public Muscle<?,?>[] getMuscles() {
+		ArrayList<Muscle<?,?>> muscles = new ArrayList<Muscle<?,?>>();
+		muscles.addAll(Arrays.asList(getStage1().getMuscles()));
+		muscles.addAll(Arrays.asList(getStage2().getMuscles()));
+		return muscles.toArray(new Muscle<?,?>[muscles.size()]);
 	}
 }

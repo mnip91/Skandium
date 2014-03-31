@@ -18,6 +18,8 @@
 
 package cl.niclabs.skandium.autonomic;
 
+import java.io.Serializable;
+
 /**
  * This class represents a transition for the state machines. A transition is 
  * comparable in order to allow the use of a priority queue during the 
@@ -30,8 +32,10 @@ package cl.niclabs.skandium.autonomic;
  * @author Gustavo Pabon &lt;gustavo.pabon&#64;gmail.com&gt;
  *
  */
-abstract class Transition implements Comparable<Transition> {
+abstract class Transition implements Comparable<Transition>, Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Transition label is the (uniquely) identification of the transition. 
 	 */

@@ -18,6 +18,7 @@
 
 package cl.niclabs.skandium.autonomic;
 
+import java.io.Serializable;
 import java.util.Stack;
 
 import cl.niclabs.skandium.events.When;
@@ -32,8 +33,10 @@ import cl.niclabs.skandium.skeletons.Skeleton;
  * @author Gustavo Pabon &lt;gustavo.pabon&#64;gmail.com&gt;
  *
  */
-class TransitionLabel implements Comparable<TransitionLabel> {
+class TransitionLabel implements Comparable<TransitionLabel>, Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * Constant to identify transitions that do not receive any parameter
 	 */

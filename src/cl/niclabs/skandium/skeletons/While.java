@@ -17,12 +17,16 @@
  */
 package cl.niclabs.skandium.skeletons;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import cl.niclabs.skandium.events.ConditionListener;
 import cl.niclabs.skandium.events.IndexListener;
 import cl.niclabs.skandium.events.When;
 import cl.niclabs.skandium.events.Where;
 import cl.niclabs.skandium.muscles.Condition;
 import cl.niclabs.skandium.muscles.Execute;
+import cl.niclabs.skandium.muscles.Muscle;
 
 /**
  * A <code></code> {@link cl.niclabs.skandium.skeletons.Skeleton}
@@ -74,5 +78,13 @@ public class While<P> extends AbstractSkeleton<P,P> {
 
 	public Skeleton<P, P> getSubskel() {
 		return subskel;
+	}
+	
+	@Override
+	public Muscle<?,?>[] getMuscles() {
+		ArrayList<Muscle<?,?>> muscles = new ArrayList<Muscle<?,?>>();
+		muscles.add(getCondition());
+		muscles.addAll(Arrays.asList(getSubskel().getMuscles()));
+		return muscles.toArray(new Muscle<?,?>[muscles.size()]);
 	}
 }

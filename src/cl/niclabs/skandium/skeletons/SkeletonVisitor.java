@@ -17,13 +17,15 @@
  */
 package cl.niclabs.skandium.skeletons;
 
+import java.io.Serializable;
+
 /**
  * The following methods must be implemented by a SkeletonVisitor.
  * These methods are part of the skeleton design pattern.
  * 
  * @author mleyton
  */
-public interface SkeletonVisitor {
+public interface SkeletonVisitor extends Serializable {
 	
     public <P,R> void visit(DaC<P,R> skeleton);
     
