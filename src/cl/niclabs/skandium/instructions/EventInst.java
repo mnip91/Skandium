@@ -37,6 +37,7 @@ import cl.niclabs.skandium.system.events.SkandiumEventListener;
  */
 
 public class EventInst extends AbstractInstruction {
+	private static final long serialVersionUID = 1L;
 	
 	When when;
 	Where where;

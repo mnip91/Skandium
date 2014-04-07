@@ -17,9 +17,6 @@
  */
 package cl.niclabs.skandium.skeletons;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import cl.niclabs.skandium.muscles.Execute;
 import cl.niclabs.skandium.muscles.Muscle;
 
@@ -33,7 +30,7 @@ import cl.niclabs.skandium.muscles.Muscle;
  * @param <R> The result type of the {@link cl.niclabs.skandium.skeletons.Skeleton}.
  */
 public class Seq<P,R> extends AbstractSkeleton<P,R> {
-
+	private static final long serialVersionUID = 1L;
 	Execute<P,R> execute;
 	
 	public Seq(Execute <P,R> execute){

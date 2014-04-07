@@ -38,7 +38,7 @@ import cl.niclabs.skandium.muscles.Split;
  * @param <R> The result type of the {@link cl.niclabs.skandium.skeletons.Skeleton}. 
  * */
 public class Fork<P,R> extends AbstractSkeleton<P,R> {
-
+	private static final long serialVersionUID = 1L;
 	Split<P,?> split;
 	Skeleton<?,?> skeletons[];
 	Merge<?,R> merge;

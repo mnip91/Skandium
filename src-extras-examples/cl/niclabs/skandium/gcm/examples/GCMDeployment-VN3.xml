@@ -18,7 +18,7 @@
 	    </hosts>
 	
 	    <groups>
-	        <sshGroup id="group3" hostList="rubik" />
+	        <sshGroup id="group3" hostList="eon4" />
 	    </groups>
 	</infrastructure>
 

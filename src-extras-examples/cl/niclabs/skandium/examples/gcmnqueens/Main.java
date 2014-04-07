@@ -2,7 +2,6 @@ package cl.niclabs.skandium.examples.gcmnqueens;
 
 import java.io.File;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -24,16 +23,13 @@ import org.objectweb.proactive.gcmdeployment.GCMVirtualNode;
 
 import cl.niclabs.skandium.Skandium;
 import cl.niclabs.skandium.Stream;
-import cl.niclabs.skandium.autonomic.AutonomicThreads;
 import cl.niclabs.skandium.gcm.DelegationCondition;
 import cl.niclabs.skandium.gcm.GCMSConstants;
 import cl.niclabs.skandium.gcm.GCMSkandium;
-import cl.niclabs.skandium.gcm.GCMSkandiumBuilder;
+import cl.niclabs.skandium.gcm.GCMSBuilder;
 import cl.niclabs.skandium.gcm.ResultReceiver;
 import cl.niclabs.skandium.gcm.SkandiumComponentController;
-import cl.niclabs.skandium.muscles.Muscle;
 import cl.niclabs.skandium.skeletons.Map;
-import cl.niclabs.skandium.skeletons.While;
 
 
 public class Main {
@@ -61,7 +57,7 @@ public class Main {
 	}
 	
 	private static void gcmExecution(int BOARD_SIZE, int DEPTH, final int STACK_SIZE) throws Exception {
-		String descriptorPath = "file:///run/netsop/u/sop-nas2a/vol/home_oasis/mibanez/"
+		String descriptorPath = "file:///user/mibanez/home/"
 				+ "Workspace/Skandium/src-extras-examples/cl/niclabs/skandium/gcm/examples/GCMApp.xml";
 		
 		descriptorPath = (new URL(descriptorPath)).toURI().getPath();
@@ -96,9 +92,9 @@ public class Main {
 	    });
 	    Component exampleComp = gf.newFcInstance(tExample, new ControllerDescription("exampleComp", Constants.PRIMITIVE), new ContentDescription(NQueensImpl.class.getName()), N1example);
 	    
-	    Component SC1 = GCMSkandiumBuilder.build("SC1", N1sc);
-	    Component SC2 = GCMSkandiumBuilder.build("SC2", N2sc);
-	    Component SC3 = GCMSkandiumBuilder.build("SC3", N3sc);
+	    Component SC1 = GCMSBuilder.build("SC1", N1sc);
+	    Component SC2 = GCMSBuilder.build("SC2", N2sc);
+	    Component SC3 = GCMSBuilder.build("SC3", N3sc);
 
         PABindingController bcExample = Utils.getPABindingController(exampleComp);
         bcExample.bindFc(GCMSConstants.GCMSKANDIUM_ITF, SC1.getFcInterface(GCMSConstants.GCMSKANDIUM_ITF));

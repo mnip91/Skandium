@@ -33,7 +33,7 @@ import cl.niclabs.skandium.skeletons.Skeleton;
  * @author mleyton
  */
 public class MapInst extends  AbstractInstruction {
-	
+	private static final long serialVersionUID = 1L;
 	@SuppressWarnings("rawtypes")
 	Split split;
 	Stack<Instruction> substack;

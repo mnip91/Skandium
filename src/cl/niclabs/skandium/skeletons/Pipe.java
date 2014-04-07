@@ -31,7 +31,7 @@ import cl.niclabs.skandium.muscles.Muscle;
  * @param <R> The result type of the {@link cl.niclabs.skandium.skeletons.Skeleton}. 
  * */
 public class Pipe<P,R> extends AbstractSkeleton<P,R> {
-
+	private static final long serialVersionUID = 1L;
 	Skeleton<P,?> stage1;
         Skeleton<?,R> stage2;
 	

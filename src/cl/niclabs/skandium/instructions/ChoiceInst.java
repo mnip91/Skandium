@@ -28,6 +28,7 @@ import cl.niclabs.skandium.skeletons.Skeleton;
  */
 
 public class ChoiceInst extends AbstractInstruction {
+	private static final long serialVersionUID = 1L;
 	
 	boolean cond;
 	Stack<Instruction> trueCaseStack, falseCaseStack;

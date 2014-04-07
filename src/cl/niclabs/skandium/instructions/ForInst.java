@@ -29,7 +29,7 @@ import cl.niclabs.skandium.skeletons.Skeleton;
  * @author mleyton
  */
 public class ForInst extends AbstractInstruction{
-
+	private static final long serialVersionUID = 1L;
 	Stack<Instruction> substack;
 	int times;
 	

@@ -36,7 +36,7 @@ import cl.niclabs.skandium.instructions.Instruction;
  * @author mleyton
  */
 public class Task implements Runnable, Comparable<Task>, Serializable {
-
+	private static final long serialVersionUID = 1L;
 	static Random random = new Random();
 	
 	public long id;					//The unique identifier of this task.

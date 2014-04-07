@@ -35,6 +35,7 @@ import cl.niclabs.skandium.system.events.EventIdGenerator;
  * @author mleyton
  */
 public class DaCInst extends  AbstractInstruction {
+	private static final long serialVersionUID = 1L;
 	
 	@SuppressWarnings("rawtypes" )
 	Condition condition;

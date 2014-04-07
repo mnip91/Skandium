@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
  * @author mleyton
  */
 public class TaskExecutor extends ThreadPoolExecutor {
-	
+
 	public TaskExecutor() {
 		super(1, 1, 10, TimeUnit.MILLISECONDS, new PriorityBlockingQueue<Runnable>());
 	}
@@ -70,4 +70,5 @@ public class TaskExecutor extends ThreadPoolExecutor {
 			task.notifyParent();
 		}
 	}
+	
 }

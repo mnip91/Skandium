@@ -38,7 +38,7 @@ import cl.niclabs.skandium.skeletons.While;
  * nested skeletons), and register or remove generic event listeners.
  */
 public class GenericListenerRegistry implements SkeletonVisitor {
-	
+	private static final long serialVersionUID = 1L;
 	private boolean remove;
 	@SuppressWarnings("rawtypes")
 	private Class pattern;

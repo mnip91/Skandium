@@ -13,7 +13,7 @@ import cl.niclabs.skandium.gcm.taskheader.TaskHeader;
 public class TaskDispatch implements ParamDispatch {
 
 	private static int counter = 0;
-	private static int nbOutputReceivers = 0;
+	private int nbOutputReceivers = 0;
 	private static List<Object> output;
 	private static TaskHeader NULL_TH = new NullTaskHeader();
 	

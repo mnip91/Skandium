@@ -9,7 +9,7 @@
 	    <proactive base="home" relpath="Workspace">
 	        <configuration>
 	            <applicationClasspath>
-	                <pathElement base="proactive" relpath="Skandium/external-lib/gcm/ProActive.jar"/>
+	            	<pathElement base="proactive" relpath="Skandium/external-lib/gcm/ProActive.jar"/>
 	                <pathElement base="proactive" relpath="Skandium/build/skandium-1.0b2.jar"/>
 	                <pathElement base="proactive" relpath="Skandium/build/skandium-1.0b2-extras.jar"/>
 	                <pathElement base="proactive" relpath="Skandium/build/skandium-1.0b2-extras-examples.jar"/>

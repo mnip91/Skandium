@@ -38,7 +38,7 @@ import cl.niclabs.skandium.system.events.SkandiumEventListener;
  * @param <R> The output type of the skeleton.
  */
 public abstract class AbstractSkeleton<P,R> implements Skeleton<P,R> {
-	
+	private static final long serialVersionUID = 1L;
 	//holds reference to source code instantiation, for skeleton logical exceptions.
 	StackTraceElement trace;
 	PatternEventRegistry eregis;

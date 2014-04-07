@@ -35,7 +35,7 @@ import cl.niclabs.skandium.muscles.Muscle;
  * @param <P> The input and output type of the {@link cl.niclabs.skandium.skeletons.Skeleton}.
  * */
 public class While<P> extends AbstractSkeleton<P,P> {
-
+	private static final long serialVersionUID = 1L;
 	Skeleton<P,P> subskel;
 	Condition<P> condition;
 	

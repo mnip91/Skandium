@@ -1,10 +1,6 @@
 package cl.niclabs.skandium.gcm;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.PriorityBlockingQueue;
 
 import org.objectweb.fractal.api.NoSuchInterfaceException;
 import org.objectweb.fractal.api.control.BindingController;
@@ -14,16 +10,13 @@ import org.objectweb.proactive.Body;
 import org.objectweb.proactive.core.component.body.ComponentInitActive;
 import org.objectweb.proactive.extensions.dataspaces.Utils;
 
-import cl.niclabs.skandium.gcm.autonomic.AutonomicThreads;
 import cl.niclabs.skandium.gcm.autonomic.Controller;
 import cl.niclabs.skandium.gcm.taskheader.NullTaskHeader;
 import cl.niclabs.skandium.gcm.taskheader.TaskHeader;
-import cl.niclabs.skandium.muscles.Muscle;
 import cl.niclabs.skandium.skeletons.AbstractSkeleton;
 import cl.niclabs.skandium.skeletons.Skeleton;
 import cl.niclabs.skandium.system.StackBuilder;
 import cl.niclabs.skandium.system.Task;
-import cl.niclabs.skandium.system.TaskExecutor;
 
 
 public class GCMSkandiumImpl implements GCMSkandium, 
@@ -41,6 +34,7 @@ public class GCMSkandiumImpl implements GCMSkandium,
 	private GCMSTaskExecutor gcmexecutor;
 	private DistributionRegistry registry; 
 	private int maxThreads;
+	private DelegationCondition condition;
 	
 	Controller autonomicController;
 	
@@ -50,14 +44,7 @@ public class GCMSkandiumImpl implements GCMSkandium,
 	public <P extends Serializable, R extends Serializable> void execute(Skeleton<P, R> skeleton, P param, Boolean autonomic) {
 
 		if (autonomic) {
-			autonomicController = new Controller(skeleton, gcmexecutor,
-					maxThreads, AutonomicThreads.DEFAULT_POLL_CHECK,
-					new HashMap<Muscle<?, ?>, Long>(),
-					new HashMap<Muscle<?, ?>, Integer>(),
-					AutonomicThreads.RHO,
-					AutonomicThreads.DEFAULT_WALL_CLOCK_TIME_GOAL,
-					Runtime.getRuntime().availableProcessors() * 2,
-					false, this);
+			autonomicController = new Controller(skeleton, this, gcmexecutor);
 			((AbstractSkeleton<?, ?>) skeleton).addGeneric(autonomicController, Skeleton.class, null, null);
 		}
 		
@@ -159,13 +146,14 @@ public class GCMSkandiumImpl implements GCMSkandium,
 	
 	@Override
 	public void setMaxThreads(int maxThreads) {
+		this.maxThreads = maxThreads;
 		gcmexecutor.setMaximumPoolSize(maxThreads);
 	}
 
 
 	@Override
 	public void setDelegationCondition(DelegationCondition condition) {
-		gcmexecutor.setDelegationCondition(condition);
+		this.condition = condition;
 	}
 	
 	
@@ -175,7 +163,7 @@ public class GCMSkandiumImpl implements GCMSkandium,
 	public void startFc() throws IllegalLifeCycleException {
 		maxThreads = Runtime.getRuntime().availableProcessors();
 		registry = new DistributionRegistry();
-		gcmexecutor = new GCMSTaskExecutor(maxThreads, new PriorityBlockingQueue<Runnable>(), this);
+		gcmexecutor = new GCMSTaskExecutor(maxThreads, this);
 	}
 
 	@Override
@@ -243,6 +231,16 @@ public class GCMSkandiumImpl implements GCMSkandium,
 	@Override
 	public void initComponentActivity(Body arg0) {
 		System.out.println("GCMSkandium initiated on " + Utils.getHostname());
+	}
+
+	
+	// INTERNAL RESOURCES
+	public int getMaxThreads() {
+		return maxThreads;
+	}
+
+	public DelegationCondition getCondition() {
+		return condition;
 	}
 
 }

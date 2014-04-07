@@ -42,7 +42,7 @@ import cl.niclabs.skandium.muscles.Split;
  * @param <R> The type of the result.
  */
 public class DaC<P,R> extends AbstractSkeleton<P,R> {
-	
+	private static final long serialVersionUID = 1L;
 	Condition<P> condition;
 	Split<P,?> split;
 	Skeleton<?,?> skeleton;

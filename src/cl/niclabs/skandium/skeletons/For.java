@@ -32,7 +32,7 @@ import cl.niclabs.skandium.muscles.Muscle;
  * @param <P> The input and result type of the {@link cl.niclabs.skandium.skeletons.Skeleton}.
  * */
 public class For<P> extends AbstractSkeleton<P,P> {
-
+	private static final long serialVersionUID = 1L;
 	Skeleton<P,P> subskel;
 	int times;
 	

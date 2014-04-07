@@ -32,7 +32,7 @@ import java.util.concurrent.TimeoutException;
  * @param <V> The type of the awaited object.
  */
 public class SkandiumFuture<V> implements Future<V>, Serializable {
-
+	private static final long serialVersionUID = 1L;
 	TaskExecutor executor;
 	Task task;
 	V result;

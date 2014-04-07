@@ -54,7 +54,7 @@ import cl.niclabs.skandium.system.events.EventIdGenerator;
  * @author mleyton
  */
 public class StackBuilder implements SkeletonVisitor {
-
+	private static final long serialVersionUID = 1L;
 	public Stack<Instruction> stack;
 	@SuppressWarnings("rawtypes")
 	public Stack<Skeleton> strace;

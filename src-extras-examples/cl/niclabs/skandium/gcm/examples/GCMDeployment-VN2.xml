@@ -18,7 +18,7 @@
 	    </hosts>
 	
 	    <groups>
-	        <sshGroup id="group2" hostList="styx" />
+	        <sshGroup id="group2" hostList="eon3" />
 	    </groups>
 	</infrastructure>
 

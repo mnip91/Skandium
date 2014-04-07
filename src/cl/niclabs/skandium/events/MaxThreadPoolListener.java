@@ -24,7 +24,8 @@ import cl.niclabs.skandium.system.events.SkandiumEventListener;
  * get the MaxThreadPool parameter defined to the current {@link cl.niclabs.skandium.Skandium} instance
  */
 public abstract class MaxThreadPoolListener implements SkandiumEventListener {
-
+	private static final long serialVersionUID = 1L;
+	
 	/**
 	 * Default implementation of compareTo method inherited from Comparable interface
 	 * of {@link SkandiumEventListener#compareTo} where the 

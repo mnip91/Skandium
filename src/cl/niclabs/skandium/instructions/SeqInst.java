@@ -31,7 +31,7 @@ import cl.niclabs.skandium.skeletons.Skeleton;
  * @author mleyton
  */
 public class SeqInst extends AbstractInstruction {
-
+	private static final long serialVersionUID = 1L;
 	@SuppressWarnings("rawtypes")
 	Muscle execute;
 

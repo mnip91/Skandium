@@ -33,7 +33,7 @@ import cl.niclabs.skandium.skeletons.Skeleton;
  */
 
 public class SplitInst extends AbstractInstruction {
-	
+	private static final long serialVersionUID = 1L;
 	boolean cond;
 	List<Stack<Instruction>> substacks;
 	@SuppressWarnings("rawtypes")

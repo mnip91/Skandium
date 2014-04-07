@@ -34,7 +34,7 @@ import cl.niclabs.skandium.system.Task;
  * @author mleyton
  */
 public class Interpreter implements Serializable {
-	
+	private static final long serialVersionUID = 1L;
 	/**
 	 * This is the main interpretation method.
 	 * 

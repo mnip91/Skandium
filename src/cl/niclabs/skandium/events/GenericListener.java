@@ -25,7 +25,8 @@ import cl.niclabs.skandium.system.events.SkandiumEventListener;
  * parameters as in the case of generic listeners. 
  */
 public abstract class GenericListener implements SkandiumEventListener {
-
+	private static final long serialVersionUID = 1L;
+	
 	/**
 	 * Default implementation of compareTo method inherited from Comparable interface
 	 * of {@link SkandiumEventListener#compareTo} where the 

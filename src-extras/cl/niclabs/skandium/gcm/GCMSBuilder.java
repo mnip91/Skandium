@@ -16,7 +16,7 @@ import org.objectweb.proactive.core.component.factory.PAGenericFactory;
 import org.objectweb.proactive.core.component.type.PAGCMTypeFactory;
 import org.objectweb.proactive.core.node.Node;
 
-public class GCMSkandiumBuilder {
+public class GCMSBuilder {
 
 	public static Component build(String name, Node node) throws InstantiationException, NoSuchInterfaceException {
 		

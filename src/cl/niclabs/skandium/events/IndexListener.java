@@ -21,7 +21,8 @@ import cl.niclabs.skandium.skeletons.Skeleton;
 import cl.niclabs.skandium.system.events.SkandiumEventListener;
 
 public abstract class IndexListener<P> implements SkandiumEventListener {
-
+	private static final long serialVersionUID = 1L;
+	
 	/**
 	 * Default implementation of compareTo method inherited from Comparable interface
 	 * of {@link SkandiumEventListener#compareTo} where the 

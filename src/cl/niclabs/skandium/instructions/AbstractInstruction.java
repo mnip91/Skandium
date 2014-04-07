@@ -31,7 +31,8 @@ import cl.niclabs.skandium.system.events.EventIdGenerator;
  * @author mleyton
  */
 abstract class AbstractInstruction implements Instruction {
-
+	private static final long serialVersionUID = 1L;
+	
 	int parent;
 	int id;
 
